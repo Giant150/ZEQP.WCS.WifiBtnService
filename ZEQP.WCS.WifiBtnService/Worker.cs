@@ -36,15 +36,17 @@ namespace ZEQP.WCS.WifiBtnService
         {
             this.Logger.LogInformation("开始初始化设备");
             await Init41(cancellationToken);
+
+            await Init93(0x01, 0x03, cancellationToken);
+            await Init93(0x02, 0x03, cancellationToken);
+            await Init93(0x03, 0x03, cancellationToken);
+            await Init93(0x04, 0x03, cancellationToken);
+
             await Init83(0x01, 0x00, cancellationToken);
             await Init83(0x02, 0x00, cancellationToken);
             await Init83(0x03, 0x00, cancellationToken);
             await Init83(0x04, 0x00, cancellationToken);
 
-            await Init93(0x01, 0x03, cancellationToken);
-            await Init83(0x02, 0x03, cancellationToken);
-            await Init83(0x03, 0x03, cancellationToken);
-            await Init83(0x04, 0x03, cancellationToken);
             this.Logger.LogInformation("初始化设备完成");
         }
 
@@ -58,20 +60,21 @@ namespace ZEQP.WCS.WifiBtnService
                 this.Logger.LogInformation($"按钮盒主动上传按键状态：{GetCmdString(buffer.Take(received).ToArray())}");
                 if (buffer[6] == 0x73)
                 {
+                    var index = buffer[9];//按钮1~4
+                    var status = buffer[10];
+                    this.Logger.LogInformation($"按钮盒主动上传({index.ToString("X")})按键({(status == 0x00 ? "完成" : "呼叫")})状态");
                     var cmdBytes = new byte[] { 0x2A, 0x00, 0x01, 0x00, 0x02, 0x05, 0x73, 0x00, 0x01, 0x01, 0xA7 };
                     this.GetReverseDeviceNo().CopyTo(cmdBytes, 1);
-                    var index = buffer[9];//按钮1~4
                     cmdBytes[9] = index;
                     cmdBytes = UpdateCheckSum(cmdBytes);
                     this.Logger.LogInformation($"按钮盒主动上传按键状态后，软件返回：{GetCmdString(cmdBytes)}");
                     await this.Stream.WriteAsync(cmdBytes, stoppingToken);
-                    var status = buffer[10];
                     if (status == 0x01)//呼叫
                     {
                         await Init93(index, 0x01, stoppingToken);//把对应按钮灯点亮
-                        await Task.Delay(5000, stoppingToken);
-                        await Init83(index, 0x00, stoppingToken);//把对应按钮的状态修改为完成
+                        await Task.Delay(3000, stoppingToken);
                         await Init93(index, 0x03, stoppingToken);//把对应按钮灯点灭
+                        await Init83(index, 0x00, stoppingToken);//把对应按钮的状态修改为完成
                     }
                 }
             }
@@ -127,7 +130,7 @@ namespace ZEQP.WCS.WifiBtnService
             cmdBytes[9] = index;
             cmdBytes[10] = status;
             cmdBytes = UpdateCheckSum(cmdBytes);
-            this.Logger.LogInformation($"软件下发按键状态：{GetCmdString(cmdBytes)}");
+            this.Logger.LogInformation($"软件下发({index})按键({(status==0x00?"完成":"呼叫")})状态：{GetCmdString(cmdBytes)}");
             await this.Stream.WriteAsync(cmdBytes, cancellationToken);
             var buffer = new byte[1024];
             var received = await this.Stream.ReadAsync(buffer, cancellationToken);
@@ -148,7 +151,7 @@ namespace ZEQP.WCS.WifiBtnService
             cmdBytes[9] = index;
             cmdBytes[10] = status;
             cmdBytes = UpdateCheckSum(cmdBytes);
-            this.Logger.LogInformation($"软件下发灯状态：{GetCmdString(cmdBytes)}");
+            this.Logger.LogInformation($"软件下发({index})灯({status})状态：{GetCmdString(cmdBytes)}");
             await this.Stream.WriteAsync(cmdBytes, cancellationToken);
             var buffer = new byte[1024];
             var received = await this.Stream.ReadAsync(buffer, cancellationToken);
