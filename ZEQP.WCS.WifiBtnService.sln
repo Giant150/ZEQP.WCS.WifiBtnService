@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZEQP.WCS.WifiBtnService", "ZEQP.WCS.WifiBtnService\ZEQP.WCS.WifiBtnService.csproj", "{5CAE35A4-7180-4265-B7BF-8151A325DDAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiFiBtnClient", "WiFiBtnClient\WiFiBtnClient.csproj", "{0FFB5087-4BCE-4FCB-8549-DE1401CC3EFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5CAE35A4-7180-4265-B7BF-8151A325DDAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CAE35A4-7180-4265-B7BF-8151A325DDAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CAE35A4-7180-4265-B7BF-8151A325DDAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CAE35A4-7180-4265-B7BF-8151A325DDAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FFB5087-4BCE-4FCB-8549-DE1401CC3EFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FFB5087-4BCE-4FCB-8549-DE1401CC3EFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FFB5087-4BCE-4FCB-8549-DE1401CC3EFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FFB5087-4BCE-4FCB-8549-DE1401CC3EFD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6FCC9696-F075-4EAD-A793-DB5128812D87}
+	EndGlobalSection
+EndGlobal
