@@ -157,40 +157,6 @@ namespace ZEQP.WCS.WifiBtnService
             var received = await this.Stream.ReadAsync(buffer, cancellationToken);
             this.Logger.LogInformation($"软件下发灯状态后，按钮盒返回：{GetCmdString(buffer.Take(received).ToArray())}");
         }
-
-        private List<byte> GetByteCommand(string cmd)
-        {
-            var charArray = cmd.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            return charArray.Select(s => Convert.ToByte(s, 16)).ToList();
-        }
-        /// <summary>
-        /// 获取校验和命令参数
-        /// </summary>
-        /// <param name="cmd"></param>
-        /// <returns></returns>
-        private byte[] GetCheckSumCommand(string cmd)
-        {
-            var bytes = GetByteCommand(cmd);
-            return GetCheckSumCommand(bytes);
-        }
-        /// <summary>
-        /// 获取校验和命令参数
-        /// </summary>
-        /// <param name="cmd"></param>
-        /// <returns></returns>
-        private byte[] GetCheckSumCommand(List<byte> bytes)
-        {
-            int num = 0;
-            for (int i = 0; i < bytes.Count; i++)
-            {
-                num += bytes[i];
-            }
-            num = num & 0xff;
-            var str = num.ToString("X");
-            var checkSum = Convert.ToByte(str, 16);
-            bytes.Add(checkSum);
-            return bytes.ToArray();
-        }
         private byte[] UpdateCheckSum(byte[] bytes)
         {
             int num = 0;
